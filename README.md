@@ -32,4 +32,6 @@ $.lateImages.defaults = {
 	'errorClass': 'lateImageError'
 };
 ```
+##Installation
+Plugin depends on [whenInViewport plugin](https://github.com/dbrekalo/whenInViewport) that needs to be included before main file.
 
