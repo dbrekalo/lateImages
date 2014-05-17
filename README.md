@@ -8,7 +8,10 @@ $('.lateImages').lateImages();
 $('.lateImages').lateImages({
 	'srcAttribute': 'data-late-src',
 	'altAttribute': 'alt',
-	'threshold': 200
+	'threshold': 200,
+	'doneCallback': function($img){
+		console.log($img);
+	}
 });
 ```
 ##Options
