@@ -1,0 +1,28 @@
+{
+  "name": "lateImages",
+  "version": "1.0.0",
+  "homepage": "https://github.com/dbrekalo/lateImages",
+  "authors": [
+    "Damir Brekalo <dbrekalo@gmail.com>"
+  ],
+  "description": "Delay loading of images until they enter viewport with lightweight plugin for jQuery",
+  "main": "dist/lateImages.min.js",
+  "keywords": [
+    "lateImages",
+    "late",
+    "images",
+    "lazy",
+    "load"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "whenInViewport": "~1"
+  }
+}
