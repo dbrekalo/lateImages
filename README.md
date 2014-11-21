@@ -29,7 +29,9 @@ $.lateImages.defaults = {
 
 	'loadingClass': 'lateImageLoading',
 	'loadedClass': 'lateImageLoaded',
-	'errorClass': 'lateImageError'
+	'errorClass': 'lateImageError',
+
+	'enableViewportCheck': true
 };
 ```
 ##Installation
