@@ -45,18 +45,18 @@
 
 			$el.addClass(options.loadingClass);
 
-			loadImage(src, function(){
+			loadImage(src, function(e){
 
 				!$el.is('img') && self.$el.replaceWith($el = $(new Image()));
 
 				$el.attr('src', src).removeClass(options.loadingClass).addClass(options.loadedClass);
 				alt && $el.attr('alt', alt);
-				options.doneCallback && options.doneCallback($el, self);
+				options.doneCallback && options.doneCallback($el, e, self);
 
-			}, function(){
+			}, function(e){
 
 				$el.removeClass(options.loadingClass).addClass(options.errorClass);
-				options.failCallback && options.failCallback($el, self);
+				options.failCallback && options.failCallback($el, e, self);
 
 			});
 
