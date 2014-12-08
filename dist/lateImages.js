@@ -35,6 +35,8 @@
 
 		processImage: function(){
 
+			this.options.beforeProcessImage && this.options.beforeProcessImage(this.$el, this);
+
 			var $el = this.$el,
 				options = this.options,
 				src = $el.attr(options.srcAttribute),
@@ -49,12 +51,12 @@
 
 				$el.attr('src', src).removeClass(options.loadingClass).addClass(options.loadedClass);
 				alt && $el.attr('alt', alt);
-				options.doneCallback && options.doneCallback($el);
+				options.doneCallback && options.doneCallback($el, self);
 
 			}, function(){
 
 				$el.removeClass(options.loadingClass).addClass(options.errorClass);
-				options.failCallback && options.failCallback($el);
+				options.failCallback && options.failCallback($el, self);
 
 			});
 
@@ -68,6 +70,7 @@
 		'srcAttribute': 'data-src',
 		'altAttribute': 'data-alt',
 
+		'beforeProcessImage': null,
 		'doneCallback': null,
 		'failCallback': null,
 
