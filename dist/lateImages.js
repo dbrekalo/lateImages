@@ -2,7 +2,10 @@
 
 	function loadImage(src, doneCallback, failCallback){
 
-        $('<img src="'+ src +'">').load(doneCallback).error(failCallback);
+        var image = new Image();
+        image.onload = doneCallback;
+        image.onerror = failCallback;
+        image.src = src;
 
     }
 
