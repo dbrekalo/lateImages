@@ -1,6 +1,6 @@
 {
   "name": "lateImages",
-  "version": "1.21.1",
+  "version": "1.21.2",
   "homepage": "https://github.com/dbrekalo/lateImages",
   "authors": [
     "Damir Brekalo <dbrekalo@gmail.com>"
@@ -23,6 +23,7 @@
     "tests"
   ],
   "dependencies": {
-    "whenInViewport": "~1"
+    "jquery": ">=1.7",
+    "whenInViewport": "^1.3.1"
   }
 }

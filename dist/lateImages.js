@@ -1,6 +1,16 @@
-;(function($){
+(function(factory) {
 
-	function loadImage(src, doneCallback, failCallback){
+    if (typeof define === 'function' && define.amd) {
+        define(['jquery', 'when-in-viewport'], factory);
+    } else if (typeof module === 'object' && module.exports) {
+        module.exports = factory(require('jquery'), require('when-in-viewport'));
+    } else {
+        factory(jQuery);
+    }
+
+}(function($) {
+
+    function loadImage(src, doneCallback, failCallback) {
 
         var image = new Image();
         image.onload = doneCallback;
@@ -9,91 +19,93 @@
 
     }
 
-	function LateImages(el, options){
+    function LateImages(el, options) {
 
-		this.$el = $(el);
-		this.options = $.extend({}, $.lateImages.defaults, options);
-		this.init();
+        this.$el = $(el);
+        this.options = $.extend({}, LateImages.defaults, options);
+        this.init();
 
-	}
+    }
 
-	$.extend(LateImages.prototype,{
+    $.extend(LateImages.prototype, {
 
-		init: function(){
+        init: function() {
 
-			if (this.options.enableViewportCheck) {
+            if (this.options.enableViewportCheck) {
 
-				this.$el.whenInViewport(this.processImage, {
-					context: this,
-					threshold: this.options.threshold
-				});
+                this.$el.whenInViewport(this.processImage, {
+                    context: this,
+                    threshold: this.options.threshold
+                });
 
-			} else {
+            } else {
 
-				this.processImage();
+                this.processImage();
 
-			}
+            }
 
-		},
+        },
 
-		processImage: function(){
+        processImage: function() {
 
-			this.options.beforeProcessImage && this.options.beforeProcessImage(this.$el, this);
+            this.options.beforeProcessImage && this.options.beforeProcessImage(this.$el, this);
 
-			var $el = this.$el,
-				options = this.options,
-				src = $el.attr(options.srcAttribute),
-				alt = $el.attr(options.altAttribute),
-				self = this;
+            var $el = this.$el,
+                options = this.options,
+                src = $el.attr(options.srcAttribute),
+                alt = $el.attr(options.altAttribute),
+                self = this;
 
-			$el.addClass(options.loadingClass);
+            $el.addClass(options.loadingClass);
 
-			loadImage(src, function(e){
+            loadImage(src, function(e) {
 
-				!$el.is('img') && self.$el.replaceWith($el = $(new Image()));
+                !$el.is('img') && self.$el.replaceWith($el = $(new Image()));
 
-				$el.attr('src', src).removeClass(options.loadingClass).addClass(options.loadedClass);
-				alt && $el.attr('alt', alt);
-				options.doneCallback && options.doneCallback($el, e, self);
+                $el.attr('src', src).removeClass(options.loadingClass).addClass(options.loadedClass);
+                alt && $el.attr('alt', alt);
+                options.doneCallback && options.doneCallback($el, e, self);
 
-			}, function(e){
+            }, function(e) {
 
-				$el.removeClass(options.loadingClass).addClass(options.errorClass);
-				options.failCallback && options.failCallback($el, e, self);
+                $el.removeClass(options.loadingClass).addClass(options.errorClass);
+                options.failCallback && options.failCallback($el, e, self);
 
-			});
+            });
 
-		}
+        }
 
-	});
+    });
 
-	$.lateImages = LateImages;
+    LateImages.defaults = {
+        srcAttribute: 'data-src',
+        altAttribute: 'data-alt',
 
-	$.lateImages.defaults = {
-		'srcAttribute': 'data-src',
-		'altAttribute': 'data-alt',
+        beforeProcessImage: null,
+        doneCallback: null,
+        failCallback: null,
 
-		'beforeProcessImage': null,
-		'doneCallback': null,
-		'failCallback': null,
+        threshold: 0,
 
-		'threshold': 0,
+        loadingClass: 'lateImageLoading',
+        loadedClass: 'lateImageLoaded',
+        errorClass: 'lateImageError',
 
-		'loadingClass': 'lateImageLoading',
-		'loadedClass': 'lateImageLoaded',
-		'errorClass': 'lateImageError',
+        enableViewportCheck: true
+    };
 
-		'enableViewportCheck': true
-	};
+    $.LateImages = $.lateImages = LateImages;
 
-	$.fn.lateImages = function(options) {
+    $.fn.lateImages = function(options) {
 
-		return this.each(function() {
-			if (!$.data(this, 'lateImages')) {
-				$.data(this, 'lateImages', new LateImages(this, options));
-			}
-		});
+        return this.each(function() {
+            if (!$.data(this, 'lateImages')) {
+                $.data(this, 'lateImages', new LateImages(this, options));
+            }
+        });
 
-	};
+    };
 
-})(window.jQuery || window.Zepto);
+    return $;
+
+}));
