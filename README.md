@@ -1,39 +1,10 @@
 #Late images
-Delay loading of images until they enter viewport with lightweight plugin for jQuery
 
-##Basic usage
-```javascript
-$('.lateImages').lateImages();
+[![Build Status](https://travis-ci.org/dbrekalo/lateImages.svg?branch=master)](https://travis-ci.org/dbrekalo/lateImages)
+[![Coverage Status](https://coveralls.io/repos/github/dbrekalo/lateImages/badge.svg?branch=master)](https://coveralls.io/github/dbrekalo/lateImages?branch=master)
+[![NPM Status](https://img.shields.io/npm/v/late-images.svg)](https://www.npmjs.com/package/late-images)
 
-$('.lateImages').lateImages({
-	'srcAttribute': 'data-late-src',
-	'altAttribute': 'alt',
-	'threshold': 200,
-	'doneCallback': function($img){
-		console.log($img);
-	}
-});
-```
-##Options
-Configure plugin with following defaults / options:
+Lightweight javascript browser library to lazy load images as they enter viewport.
+Has no big dependencies and weighs less than 2KB
 
-```javascript
-$.lateImages.defaults = {
-	'srcAttribute': 'data-src',
-	'altAttribute': 'data-alt',
-
-	'doneCallback': null,
-	'failCallback': null,
-
-	'threshold': 0,
-
-	'loadingClass': 'lateImageLoading',
-	'loadedClass': 'lateImageLoaded',
-	'errorClass': 'lateImageError',
-
-	'enableViewportCheck': true
-};
-```
-##Installation
-Plugin depends on [whenInViewport plugin](https://github.com/dbrekalo/whenInViewport) that needs to be included before main file.
-
+[Demo and documentation can be found here](http://dbrekalo.github.io/lateImages/)
