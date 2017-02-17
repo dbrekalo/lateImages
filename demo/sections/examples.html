@@ -1,0 +1,186 @@
+<section class="attireBlock mod1 testCase">
+    <div class="inner">
+
+        <h2 class="attireTitleType2">Examples and api</h2>
+
+        <p class="attireTextType2">
+            Next few images should fade in as you scroll down:
+        </p>
+
+        <hr class="attireSeparator mod1">
+
+        <ul class="imageListType1">
+            <li><div><img class="lateImage" data-src="demo/images/1small.jpg" alt="example image 1" /></div></li>
+            <li><div><img class="lateImage" data-src="demo/images/2small.jpg" alt="example image 1" /></div></li>
+            <li><div><img class="lateImage" data-src="demo/images/3small.jpg" alt="example image 1" /></div></li>
+            <li><div><img class="lateImage" data-src="demo/images/4small.jpg" alt="example image 1" /></div></li>
+            <li><div><img class="lateImage" data-src="demo/images/5small.jpg" alt="example image 1" /></div></li>
+            <li><div><img class="lateImage" data-src="demo/images/6small.jpg" alt="example image 1" /></div></li>
+        </ul>
+
+        <style>
+
+            .imageListType1 {
+
+                overflow: hidden; margin: 0 -5px; padding: 5px;
+                border: 1px solid #ededed; background: #fff;
+
+            }
+
+            .imageListType1 > li {
+
+                padding: 5px; float: left; width: 33.333%; box-sizing: border-box;
+
+            }
+
+
+            .imageListType1 div {
+
+                position: relative; padding-bottom: 65%; overflow: hidden;
+
+            }
+
+            .imageListType1 .lateImage {
+
+                position: absolute; left: 0; width: 100%;
+                opacity: 0;
+
+                transition: opacity 1s;
+
+            }
+
+            @keyframes fadeIn {
+                from { opacity: 0; }
+                to { opacity: 1; }
+            }
+
+            .imageListType1 .lateImageLoaded {
+
+                animation: fadeIn 0.5s; opacity: 1;
+
+            }
+
+        </style>
+
+        <hr class="attireSeparator mod1">
+
+        <p class="attireTextType2">
+            Late images come with jQuery adapter included - to lazy load this images we had to write was following code.
+        </p>
+
+        <pre class="attireCodeHighlight"><code class="language-javascript">
+            $('.lateImage').lateImages();
+        </code></pre>
+
+        <p class="attireTextType2">
+            Html was structured like so:
+        </p>
+
+        <pre class="attireCodeHighlight"><code class="language-markup">
+            <script type="prism-html-markup"><img class="lateImage" data-src="demo/images/1small.jpg" alt="example image 1" />
+            <img class="lateImage" data-src="demo/images/2small.jpg" alt="example image 2" />
+            </script>
+        </code></pre>
+
+        <p class="attireTextType2">
+            Image fade in was achieved via simple css animation that was trigged when new class was applied to element.
+        </p>
+
+        <script>
+
+            $(document).ready(function() {
+
+                $('.lateImage').lateImages();
+
+                // var elements = Array.prototype.slice.call(
+                //     document.getElementsByClassName('lateImage')
+                // );
+
+                // elements.forEach(function(element) {
+                //     new LateImage(element);
+                // });
+
+            });
+
+        </script>
+
+        <hr class="attireSeparator mod1">
+
+        <p class="attireTextType2">
+            Same result in plain javascript (without jQuery) is achieved like so:
+        </p>
+
+        <pre class="attireCodeHighlight"><code class="language-javascript">
+
+            var elements = Array.prototype.slice.call(
+                document.getElementsByClassName('lateImage')
+            );
+
+            elements.forEach(function(element) {
+                new LateImage(element);
+            });
+
+        </code></pre>
+
+        <hr class="attireSeparator mod1">
+
+        <p class="attireTextType2">
+            Library options are passed via second parameter to constructor.
+            If we want to start loading images 100 pixels before user scroll position we setup call like so:
+        </p>
+
+        <pre class="attireCodeHighlight"><code class="language-javascript">
+
+            // when used via jQuery plugin facade
+            $('.lateImage').lateImages({threshold: 100});
+
+            // plain js
+            new LateImage(element, {threshold: 100});
+
+        </code></pre>
+
+        <hr class="attireSeparator mod1">
+
+        <p class="attireTextType2">
+            Image lazy load can be stopped at any time by obtaining late image instance and calling destroy method on it.
+        </p>
+
+        <pre class="attireCodeHighlight"><code class="language-javascript">
+            // get instance via jQuery
+            var lateImage = $('.lateImage').lateImages().data('lateImage');
+            // or
+            var lateImage = new LateImage(element);
+
+            // sometime later
+            lateImage.destroy();
+
+        </code></pre>
+
+        <hr class="attireSeparator mod1">
+
+        <p class="attireTextType2">
+            Every late image instance will work with following defaults merged with options you passed to constructor.
+        </p>
+
+        <pre class="attireCodeHighlight"><code class="language-javascript">
+
+            LateImage.defaults = {
+                srcAttribute: 'data-src',
+                altAttribute: 'data-alt',
+
+                doneCallback: null,
+                failCallback: null,
+
+                threshold: 0,
+
+                loadingClass: 'lateImageLoading',
+                loadedClass: 'lateImageLoaded',
+                errorClass: 'lateImageError',
+
+                enableViewportCheck: true
+            };
+
+        </code></pre>
+
+    </div>
+</section>
