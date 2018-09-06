@@ -63,20 +63,18 @@
 
     };
 
-    LateImage.useClassList = true;
-
     function processImage(imageElement, options) {
 
         var imagePath = imageElement.getAttribute(options.srcAttribute);
 
         options.loadingCallback && options.loadingCallback(imageElement, options.context);
-        addClass(imageElement, options.loadingClass);
+        toggleClass(imageElement, options.loadingClass, true);
 
         loadImage(imagePath, function(e) {
 
             imageElement.setAttribute('src', imagePath);
-            removeClass(imageElement, options.loadingClass);
-            addClass(imageElement, options.loadedClass);
+            toggleClass(imageElement, options.loadingClass, false);
+            toggleClass(imageElement, options.loadedClass, true);
 
             if (imageElement.getAttribute(options.altAttribute)) {
                 imageElement.setAttribute('alt', imageElement.getAttribute(options.altAttribute));
@@ -86,8 +84,8 @@
 
         }, function(e) {
 
-            removeClass(imageElement, options.loadingClass);
-            addClass(imageElement, options.errorClass);
+            toggleClass(imageElement, options.loadingClass, false);
+            toggleClass(imageElement, options.errorClass, true);
 
             options.failCallback && options.failCallback(imageElement, e, options.context);
 
@@ -104,79 +102,55 @@
 
     }
 
-    function assign(out) {
+    function assign(target) {
 
         for (var i = 1; i < arguments.length; i++) {
-            each(arguments[i], function(value, key) {
-                out[key] = value;
-            });
-        }
-
-        return out;
-
-    }
-
-    function each(collection, callback, context) {
-
-        if (collection instanceof Array) {
-            var iterations = collection.length;
-            for (var i = 0; i < iterations; i++) {
-                callback.call(context, collection[i], i);
-            }
-        } else {
-            for (var key in collection) {
-                collection.hasOwnProperty(key) && callback.call(context, collection[key], key);
+            var source = arguments[i];
+            if (source) {
+                for (var key in source) {
+                    if (source.hasOwnProperty(key) && typeof source[key] !== 'undefined') {
+                        target[key] = source[key];
+                    }
+                }
             }
         }
 
+        return target;
+
     }
 
-    function addClass(element, classesString) {
+    function each(collection, callback) {
 
-        tryClassListMethod(element, 'add', classesString, function(singleClass, currentClasses) {
+        for (var i = 0; i < collection.length; i++) {
+            callback(collection[i], i);
+        }
 
-            if (currentClasses.indexOf(singleClass) < 0) {
-                currentClasses.push(singleClass);
-                element.className = currentClasses.join(' ');
+    }
+
+    function filter(collection) {
+
+        var temp = [];
+        each(collection, function(item) { item && temp.push(item); });
+        return temp;
+    }
+
+    function toggleClass(el, classes, addClass) {
+
+        if (LateImage.toggleClass) {
+            return LateImage.toggleClass(el, classes, addClass);
+        }
+
+        var currentClasses = filter((el.className || '').split(' '));
+        var userClasses = filter(classes.split(' '));
+        var elClasses = [];
+
+        each(addClass ? userClasses : currentClasses, function(className) {
+            if ((addClass ? currentClasses : userClasses).indexOf(className) < 0) {
+                elClasses.push(className);
             }
-
         });
 
-    }
-
-    function removeClass(element, classesString) {
-
-        tryClassListMethod(element, 'remove', classesString, function(singleClass, currentClasses) {
-
-            var classPosition = currentClasses.indexOf(singleClass);
-            if (classPosition >= 0) {
-                currentClasses.splice(classPosition, 1);
-                element.className = currentClasses.join(' ');
-            }
-
-        });
-
-    }
-
-    function tryClassListMethod(element, method, classesString, fallback) {
-
-        each(getClassesArray(classesString), function(singleClass) {
-
-            if (LateImage.useClassList && element.classList) {
-                element.classList[method](singleClass);
-            } else {
-                fallback(singleClass, getClassesArray(element.className));
-            }
-
-        });
-
-    }
-
-    function getClassesArray(classesString) {
-
-        getClassesArray.trimRE = getClassesArray.trimRE || /^\s+|\s+$/g;
-        getClassesArray.spacesRE = getClassesArray.spacesRE || /\s\s+/g;
-        return classesString ? classesString.replace(getClassesArray.trimRE, '').replace(getClassesArray.spacesRE, ' ').split(' ') : [];
+        el.setAttribute('class', elClasses.join(' '));
 
     }
 

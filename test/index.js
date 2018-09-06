@@ -145,7 +145,27 @@ describe('Late image', function() {
 
     });
 
-    it('manipulates class attributes correctly with classList', function(done) {
+    it('manipulates class attributes correctly', function(done) {
+
+        new LateImage(testImageElement, {
+            loadedClass: 'loaded   loadedLateImage'
+        });
+
+        window.scrollTo(0, 3 * windowHeight);
+
+        setTimeout(function() {
+            assert.isTrue(testImageElement.classList.contains('loaded'));
+            assert.isTrue(testImageElement.classList.contains('loadedLateImage'));
+            done();
+        }, 200);
+
+    });
+
+    it('manipulates class attributes with custom toggle class function', function(done) {
+
+        LateImage.toggleClass = function(el, className, active) {
+            el.classList[active ? 'add' : 'remove'](className);
+        };
 
         new LateImage(testImageElement, {
             loadedClass: 'loaded'
@@ -155,29 +175,6 @@ describe('Late image', function() {
 
         setTimeout(function() {
             assert.isTrue(testImageElement.classList.contains('loaded'));
-            done();
-        }, 200);
-
-    });
-
-    it('manipulates class attributes correctly when classList is not supported', function(done) {
-
-        LateImage.useClassList = false;
-
-        new LateImage(testImageElement, {
-            loadedClass: 'loaded'
-        });
-
-        new LateImage(anotherTestImageElement, {
-            errorClass: ' loadError    class1 class2 ',
-        });
-
-        window.scrollTo(0, 3 * windowHeight);
-
-        setTimeout(function() {
-            assert.isTrue(testImageElement.className === 'loaded');
-            assert.isTrue(anotherTestImageElement.className === 'class1 class2 loadError');
-            LateImage.useClassList = true;
             done();
         }, 200);
 
